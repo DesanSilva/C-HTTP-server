@@ -1,6 +1,6 @@
-#include "types.h"
-#include "errors.h"
-#include "methods.h"
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include "../include/errors.h"
 
 SSL_CTX* ssl_initialize() {
     FileError err = ERR_NONE;
@@ -100,7 +100,7 @@ SSL* ssl_connect(SSL_CTX *ctx, int clientfd) {
         goto handle_errors;
     }
 
-    file_log(INFO, "SSL/TLS handshake successful");
+    // TLS handshake successful
     return ssl;
 
 handle_errors:
@@ -119,7 +119,8 @@ void ssl_cleanup(SSL *ssl, SSL_CTX *ctx) {
         // 2 shutdowns required for a RFC-compliant bidirectional shutdown
         int shutdownStatus = SSL_shutdown(ssl);
         if (shutdownStatus == 1) {
-            file_log(INFO, "SSL shutdown complete");
+            // SSL shutdown complete
+            // file_log(INFO, "SSL shutdown complete");
 
         // if SSL_shutdown() returns 0 the shutdown is incomplete or waiting for peer
         } else if (shutdownStatus == 0) {
@@ -131,13 +132,13 @@ void ssl_cleanup(SSL *ssl, SSL_CTX *ctx) {
             goto handle_errors;
         }
 
+        // free SSL session (objects)
         SSL_free(ssl);
-        file_log(INFO, "SSL session freed");
     }
 
     if (ctx) {
+        // free ssl context
         SSL_CTX_free(ctx);
-        file_log(INFO, "SSL context cleaned up");
     }
 
     // cleanup code for versions of OpenSSL < 1.1.0
@@ -145,7 +146,7 @@ void ssl_cleanup(SSL *ssl, SSL_CTX *ctx) {
     // CRYPTO_cleanup_all_ex_data();
     // ERR_free_strings();
 
-    file_log(INFO, "OpenSSL resources cleaned up");
+    // OpenSSL resources cleaned up
     return;
 
 handle_errors:

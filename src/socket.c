@@ -1,10 +1,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-
-#include "types.h"
-#include "errors.h"
-#include "methods.h"
+#include "../include/errors.h"
 
 #define BACKLOG 10
 
@@ -40,15 +37,12 @@ handle_errors:
 }
 
 void socket_bind(int sockfd, int port) {
-    struct sockaddr_in address;
-
-    // initialize sockaddr_in struct to 0
-    memset(&address, 0, sizeof(address));
+    struct sockaddr_in address = {0};
 
     // set address family
     address.sin_family = AF_INET;
     // bind to all available interfaces
-    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_addr.s_addr = htonl(INADDR_ANY);
     // convert port to network byte order
     address.sin_port = htons(port);
 

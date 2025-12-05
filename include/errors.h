@@ -1,14 +1,14 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
-typedef enum {
-    FATAL = 0,
-    ERROR,
-    WARN,
-    INFO,
-    DEBUG
-} LogType;
+#include <errno.h>
 
+// logging message types and logging function
+typedef enum {FATAL = 0, ERROR, WARN, INFO, DEBUG} LogType;
+
+void file_log(LogType type, char* message, ...);
+
+// Error types
 typedef enum {
     ERR_NONE = 0,
     ERR_OPEN_FAILED,

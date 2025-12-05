@@ -2,10 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
-
-#include "types.h"
-#include "errors.h"
-#include "methods.h"
+#include "../include/errors.h"
 
 char* read_file(char* fileName) {
     // initialize error codes and string buffer for html code
@@ -48,7 +45,9 @@ char* read_file(char* fileName) {
 
     // add string terminator to end of buffer
     buffer[size] = '\0';
-    file_log(INFO, "file [%s] successfully read", fileName);
+
+    // file successfully read, continue with cleaning up
+    // file_log(INFO, "file [%s] successfully read", fileName);
 
 handle_errors:
     switch(err) {

@@ -1,8 +1,5 @@
-#include <unistd.h>
-#include <signal.h>
-#include "types.h"
-#include "errors.h"
-#include "methods.h"
+#include "../include/server.h"
+#include "../include/errors.h"
 
 static ServerSocket server;
 static SSLConfig sslConfig;
@@ -11,7 +8,8 @@ static ClientConnection client;
 volatile sig_atomic_t serverActive = 1;
 
 void signal_handler(int signal) {
-    file_log(INFO, "");
+    putchar('\n');
+    file_log(INFO, "Interrupt signal %d given", signal);
     serverActive = 0;
 }
 
@@ -30,6 +28,8 @@ int server_initialize(int port) {
     FileError err = ERR_NONE;
     install_signals();
 
+    server.port = port;
+
     //TODO add logging messages
     sslConfig.certificate = "certs/server.crt";
     sslConfig.privateKey = "certs/server.key";
@@ -40,7 +40,7 @@ int server_initialize(int port) {
         err = ERR_SOCK_CREATION_FAIL;
         goto handle_errors;
     }
-    socket_bind(server.sockfd, port);
+    socket_bind(server.sockfd, server.port);
     socket_listen(server.sockfd);
 
     // ssl context configuration
@@ -89,6 +89,8 @@ restart_server:
         handle_client(&client);
     }
 
+    ssl_cleanup(NULL, sslConfig.ctx);
+    close(server.sockfd);
     file_log(INFO, "Server shutdown complete");
     return;
 

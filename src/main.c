@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include "types.h"
-#include "errors.h"
-#include "methods.h"
+#define DEFAULT_HTTPS_PORT 8443
+
+void serve(int port);
 
 int main(int argc, char* argv[]) {
     // Verify port number validity if provided

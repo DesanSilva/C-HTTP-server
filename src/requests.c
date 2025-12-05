@@ -1,17 +1,11 @@
-#include <unistd.h>
-#include <stdlib.h>
-
-#include "types.h"
-#include "errors.h"
-#include "methods.h"
+#include "../include/server.h"
+#include "../include/requests.h"
+#include "../include/errors.h"
 
 void handle_client(ClientConnection *conn) {
     FileError err = ERR_NONE;
-    char buffer[BUFFER_SIZE];
+    char buffer[BUFFER_SIZE] = {0};
     int bytes;
-
-    // clear/reset buffer to 0 before reading data
-    memset(buffer, 0, BUFFER_SIZE);
 
     // read http request from client over SSL
     bytes = SSL_read(conn->ssl, buffer, BUFFER_SIZE-1);
@@ -24,9 +18,10 @@ void handle_client(ClientConnection *conn) {
     file_log(DEBUG, "Recieved request: %.*s", (int)strcspn(buffer, "\r\n"), buffer);
 
     // Route: GET /
-    if (strncmp(buffer, "GET /", 5) == 0) {
+    // character after / must be a space to match the route
+    if (strncmp(buffer, "GET / ", 6) == 0) {
         // files are saved to dynamically allocated memory by file_read()
-        char *body = read_file("./html/200.html");
+        char *body = read_file("./html/index.html");
         if (body == NULL) {
             err = ERR_FILE_READ_FAIL;
             goto handle_errors;
@@ -37,7 +32,7 @@ void handle_client(ClientConnection *conn) {
 
     // Route: GET /health
     } else if (strncmp(buffer, "GET /health", 11) == 0) {
-        char *body = "{\"status\":\"healthy\"}";
+        char *body = "{\"status\":\"healthy\"}\n";
         respond(conn->ssl, "200 OK", "application/json", body);
 
     // Route: 404 not found

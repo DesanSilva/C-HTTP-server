@@ -1,7 +1,10 @@
 .git
 
-tacrine
-test.c
+c-http-server
+
+setup.txt
+setup.sh
+.obsidian/
 
 build/
 build/*.o
