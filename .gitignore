@@ -1,0 +1,14 @@
+.git
+
+tacrine
+test.c
+
+output/
+output/*.o
+
+logs/
+logs/*.log
+
+certs/
+certs/*.crt
+certs/*.key
