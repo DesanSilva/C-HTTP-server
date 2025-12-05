@@ -3,9 +3,9 @@ CFLAGS = -Wall -Wextra -O2 -I.
 LDFLAGS = -lssl -lcrypto
 
 TARGET = tacrine
-SOURCES = main.c io.c socket.c ssl.c requests.c server.c
+SOURCES = src/main.c src/io.c src/socket.c src/ssl.c src/requests.c src/server.c
 OBJECTS = $(SOURCES:%.c=output/%.o)
-HEADERS = types.h methods.h
+HEADERS = include/types.h include/methods.h include/errors.h
 OUTPUT_DIR = output
 
 $(shell mkdir -p $(OUTPUT_DIR))

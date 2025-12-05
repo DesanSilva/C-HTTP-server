@@ -3,8 +3,8 @@
 tacrine
 test.c
 
-output/
-output/*.o
+build/
+build/*.o
 
 logs/
 logs/*.log
