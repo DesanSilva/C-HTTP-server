@@ -96,8 +96,25 @@ void file_log(LogType type, char* message, ...) {
     }
 
     // print formatted local time to file and stdout
-    fprintf(fp, "[%s]", timeBuffer);
-    printf("[%s]", timeBuffer);
+    // formatted to light gray/white
+    fprintf(fp, "\e[0;37m[%s]\e[0m ", timeBuffer);
+    printf("\e[0;37m[%s]\e[0m ", timeBuffer);
+
+    // list of ANSI colour codes
+    // https://gist.github.com/RabaDabaDoba/145049536f815903c79944599c6f952a
+    char *statusBuffer;
+    switch (type) {
+        case INFO:  statusBuffer = "\e[0;33m INFO:\e[0m "; break;     // yellow
+        case DEBUG: statusBuffer = "\e[0;32mDEBUG:\e[0m "; break;     // green
+        case ERROR: statusBuffer = "\e[0;31mERROR:\e[0m "; break;     // red
+        case WARN:  statusBuffer = "\e[0;35m WARN:\e[0m "; break;     // purple
+        case FATAL: statusBuffer = "\e[1;31mFATAL:\e[0m "; break;     // red bold
+        default:    statusBuffer = " ";
+    }
+
+    // print formatted status to file and stdout
+    fprintf(fp, "%s", statusBuffer);
+    printf("%s", statusBuffer);
 
     // use the arguments in the variable list and format them to output
     va_start(args, message);

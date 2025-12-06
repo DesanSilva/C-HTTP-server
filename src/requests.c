@@ -79,7 +79,7 @@ void respond(SSL *ssl, const char *status, const char *contentType, char *body) 
         return;
     }
 
-    file_log(DEBUG, "Response sent: %s", status);
+    file_log(DEBUG, "Response sent: \e[0;35m%s\e[0m", status);
     return;
     // no further error handling
 }

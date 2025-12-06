@@ -91,7 +91,7 @@ int socket_connect(int sockfd, struct sockaddr_in *clientAddr) {
     char* clientAddress = inet_ntoa(clientAddr -> sin_addr);
     int clientPort = ntohs(clientAddr -> sin_port);
 
-    file_log(DEBUG, "connection accepted from %s:%d", clientAddress, clientPort);
+    file_log(DEBUG, "connection accepted from \e[0;36m%s:%d\e[0m", clientAddress, clientPort);
     return clientfd;
 
 handle_errors:
