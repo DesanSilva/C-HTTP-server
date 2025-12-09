@@ -1,4 +1,4 @@
-# HTTP/HTTPS Server
+# Secure C Web Server (HTTPS)
 
 A lightweight HTTP/HTTPS server written in pure C, using only low level system libraries and OpenSSL.
 
